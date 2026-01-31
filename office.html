@@ -1,651 +1,700 @@
 <!DOCTYPE html>
 <html lang="uk">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <title>Відключення</title>
 
-    <style>
-      html,
-      body {
-        -webkit-text-size-adjust: 100%;
-        -ms-text-size-adjust: 100%;
-        text-size-adjust: 100%;
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+  <title>Відключення</title>
+
+  <style>
+    html,
+    body {
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    :root {
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --muted: #6b7280;
+      --accent: #1f6feb;
+      --border: #e6e9ec;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Montserrat", Inter, system-ui, -apple-system, "Segoe UI",
+        Roboto, "Helvetica Neue", Arial;
+      background: var(--bg);
+      color: #0f172a;
+      -webkit-font-smoothing: antialiased;
+      font-size: 16px;
+    }
+
+    .container {
+      max-width: 980px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 12px;
+    }
+
+    .header {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .meta {
+      font-size: 0.95rem;
+      color: var(--muted);
+      word-break: break-word;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+
+    .btn.secondary {
+      background: #fff;
+      color: var(--accent);
+      border: 1px solid var(--border);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .info {
+      background: linear-gradient(180deg, #fff, #fbfdff);
+      border: 1px solid var(--border);
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 8px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    th,
+    td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    th {
+      background: #fafafa;
+      font-weight: 700;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Статуси відключень */
+    .status-past {
+      opacity: 0.5;
+      background: #f9fafb;
+    }
+
+    .status-past td {
+      color: var(--muted);
+    }
+
+    .status-current {
+      background: #fef3c7;
+      border-left: 3px solid #f59e0b;
+    }
+
+    .status-current td {
+      font-weight: 600;
+    }
+
+    .status-future {
+      background: #dbeafe;
+      border-left: 3px solid #3b82f6;
+    }
+
+    .cards {
+      display: none;
+      gap: 10px;
+      flex-direction: column;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      box-shadow: 0 1px 2px rgba(12, 18, 20, 0.04);
+    }
+
+    .card.status-past {
+      opacity: 0.5;
+      background: #f9fafb;
+    }
+
+    .card.status-past .card-value {
+      color: var(--muted);
+    }
+
+    .card.status-current {
+      background: #fef3c7;
+      border-left: 3px solid #f59e0b;
+    }
+
+    .card.status-current .card-value {
+      font-weight: 700;
+    }
+
+    .card.status-future {
+      background: #dbeafe;
+      border-left: 3px solid #3b82f6;
+    }
+
+    .card-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .card-label {
+      font-weight: 600;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .card-value {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    /* New utility classes for cards */
+    .card-details {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .card-col {
+      min-width: 120px;
+    }
+
+    .card-footer {
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .small {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .empty {
+      padding: 18px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .loading {
+      padding: 40px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .error {
+      background: #fee;
+      border: 1px solid #fcc;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      color: #c33;
+    }
+
+    .footer {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .json-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      z-index: 1000;
+    }
+
+    .json-inner {
+      background: #fff;
+      padding: 12px;
+      border-radius: 8px;
+      max-width: 960px;
+      width: 100%;
+      max-height: 80vh;
+      overflow: auto;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+
+    .close-x {
+      position: absolute;
+      right: 12px;
+      top: 8px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 4px 8px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    /* New utility classes for modal */
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .json-text {
+      white-space: pre-wrap;
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .spinner {
+      border: 3px solid var(--border);
+      border-top: 3px solid var(--accent);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
       }
 
-      :root {
-        --bg: #f6f8fb;
-        --card: #ffffff;
-        --muted: #6b7280;
-        --accent: #1f6feb;
-        --border: #e6e9ec;
+      100% {
+        transform: rotate(360deg);
       }
+    }
 
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        margin: 0;
-        font-family: "Montserrat", Inter, system-ui, -apple-system, "Segoe UI",
-          Roboto, "Helvetica Neue", Arial;
-        background: var(--bg);
-        color: #0f172a;
-        -webkit-font-smoothing: antialiased;
-        font-size: 16px;
-      }
-
-      .container {
-        max-width: 980px;
-        width: 100%;
-        margin: 0 auto;
-        padding: 12px;
-      }
-
+    /* Tablet breakpoint */
+    @media (max-width: 760px) {
       .header {
-        display: flex;
-        gap: 12px;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 12px;
-      }
-
-      .title {
-        font-size: 1.15rem;
-        font-weight: 600;
-        margin: 0;
-      }
-
-      .meta {
-        font-size: 0.95rem;
-        color: var(--muted);
-        word-break: break-word;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
       }
 
       .controls {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-        flex-shrink: 0;
+        width: 100%;
       }
 
       .btn {
-        background: var(--accent);
-        color: #fff;
-        border: none;
-        padding: 10px 12px;
-        border-radius: 10px;
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 1rem;
-        font-family: inherit;
-        white-space: nowrap;
+        flex: 1;
+        justify-content: center;
       }
+    }
 
-      .btn.secondary {
-        background: #fff;
-        color: var(--accent);
-        border: 1px solid var(--border);
-      }
-
-      .btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
-
-      .info {
-        background: linear-gradient(180deg, #fff, #fbfdff);
-        border: 1px solid var(--border);
-        padding: 10px;
-        border-radius: 10px;
-        margin-bottom: 12px;
+    /* Mobile breakpoint - переключення на картки */
+    @media (max-width: 720px) {
+      body {
+        font-size: 15px;
       }
 
       .table-wrap {
-        overflow-x: auto;
-        border-radius: 8px;
-        background: var(--card);
-        border: 1px solid var(--border);
-        -webkit-overflow-scrolling: touch;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.95rem;
-      }
-
-      th,
-      td {
-        padding: 12px;
-        border-bottom: 1px solid var(--border);
-        text-align: left;
-      }
-
-      th {
-        background: #fafafa;
-        font-weight: 700;
-        font-size: 0.9rem;
-        white-space: nowrap;
-      }
-
-      tbody tr:last-child td {
-        border-bottom: none;
-      }
-
-      /* Статуси відключень */
-      .status-past {
-        opacity: 0.5;
-        background: #f9fafb;
-      }
-
-      .status-past td {
-        color: var(--muted);
-      }
-
-      .status-current {
-        background: #fef3c7;
-        border-left: 3px solid #f59e0b;
-      }
-
-      .status-current td {
-        font-weight: 600;
-      }
-
-      .status-future {
-        background: #dbeafe;
-        border-left: 3px solid #3b82f6;
+        display: none !important;
       }
 
       .cards {
-        display: none;
-        gap: 10px;
-        flex-direction: column;
+        display: flex !important;
+      }
+
+      .container {
+        padding: 12px;
+      }
+
+      .title {
+        font-size: 1.2rem;
+      }
+
+      .meta {
+        font-size: 0.9rem;
+      }
+
+      .btn {
+        padding: 11px 14px;
+        font-size: 0.95rem;
+        border-radius: 10px;
       }
 
       .card {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        padding: 12px;
-        box-shadow: 0 1px 2px rgba(12, 18, 20, 0.04);
-      }
-
-      .card.status-past {
-        opacity: 0.5;
-        background: #f9fafb;
-      }
-
-      .card.status-past .card-value {
-        color: var(--muted);
-      }
-
-      .card.status-current {
-        background: #fef3c7;
-        border-left: 3px solid #f59e0b;
-      }
-
-      .card.status-current .card-value {
-        font-weight: 700;
-      }
-
-      .card.status-future {
-        background: #dbeafe;
-        border-left: 3px solid #3b82f6;
-      }
-
-      .card-row {
-        display: flex;
-        justify-content: space-between;
-        gap: 8px;
-        align-items: flex-start;
-        margin-bottom: 8px;
+        padding: 14px;
       }
 
       .card-label {
-        font-weight: 600;
-        color: var(--muted);
-        font-size: 0.9rem;
+        font-size: 0.85rem;
       }
 
       .card-value {
-        font-weight: 600;
-        font-size: 1rem;
-      }
-
-      .small {
-        font-size: 0.9rem;
-        color: var(--muted);
-      }
-
-      .empty {
-        padding: 18px;
-        text-align: center;
-        color: var(--muted);
-        font-size: 1rem;
-      }
-
-      .loading {
-        padding: 40px;
-        text-align: center;
-        color: var(--muted);
-        font-size: 1rem;
-      }
-
-      .error {
-        background: #fee;
-        border: 1px solid #fcc;
-        padding: 12px;
-        border-radius: 10px;
-        margin-bottom: 12px;
-        color: #c33;
-      }
-
-      .footer {
-        margin-top: 14px;
-        color: var(--muted);
         font-size: 0.95rem;
       }
+    }
+  </style>
+</head>
 
-      .json-modal {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.4);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        padding: 12px;
-        z-index: 1000;
-      }
-
-      .json-inner {
-        background: #fff;
-        padding: 12px;
-        border-radius: 8px;
-        max-width: 960px;
-        width: 100%;
-        max-height: 80vh;
-        overflow: auto;
-        border: 1px solid var(--border);
-        position: relative;
-      }
-
-      .close-x {
-        position: absolute;
-        right: 12px;
-        top: 8px;
-        background: #fff;
-        border-radius: 20px;
-        padding: 4px 8px;
-        border: 1px solid var(--border);
-        cursor: pointer;
-        font-family: inherit;
-        font-size: 1rem;
-      }
-
-      .spinner {
-        border: 3px solid var(--border);
-        border-top: 3px solid var(--accent);
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        animation: spin 1s linear infinite;
-        margin: 20px auto;
-      }
-
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-
-      /* Tablet breakpoint */
-      @media (max-width: 760px) {
-        .header {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 8px;
-        }
-
-        .controls {
-          width: 100%;
-        }
-
-        .btn {
-          flex: 1;
-          justify-content: center;
-        }
-      }
-
-      /* Mobile breakpoint - переключення на картки */
-      @media (max-width: 720px) {
-        body {
-          font-size: 15px;
-        }
-
-        .table-wrap {
-          display: none !important;
-        }
-
-        .cards {
-          display: flex !important;
-        }
-
-        .container {
-          padding: 12px;
-        }
-
-        .title {
-          font-size: 1.2rem;
-        }
-
-        .meta {
-          font-size: 0.9rem;
-        }
-
-        .btn {
-          padding: 11px 14px;
-          font-size: 0.95rem;
-          border-radius: 10px;
-        }
-
-        .card {
-          padding: 14px;
-        }
-
-        .card-label {
-          font-size: 0.85rem;
-        }
-
-        .card-value {
-          font-size: 0.95rem;
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="container">
-      <div class="header">
-        <div>
-          <div class="title">Перевірка відключень за адресою</div>
-          <div class="meta">
-            settlement: <span id="settlementId">—</span> • street:
-            <span id="streetId">—</span> • house: <span id="house">—</span>
-          </div>
-        </div>
-        <div class="controls">
-          <button class="btn" onclick="reloadData()">↻ Оновити</button>
-          <button class="btn secondary" onclick="showJson()">JSON</button>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <div class="title">Перевірка відключень за адресою</div>
+        <div class="meta">
+          settlement: <span id="settlementId">—</span> • street:
+          <span id="streetId">—</span> • house: <span id="house">—</span>
         </div>
       </div>
-
-      <div id="errorContainer"></div>
-
-      <div class="info">
-        <div class="small">Оновлено: <span id="timestamp">—</span></div>
-      </div>
-
-      <div id="content">
-        <div class="loading">
-          <div class="spinner"></div>
-          Завантаження даних…
-        </div>
-      </div>
-
-      <div class="footer">
-        Згенеровано: <span id="footerTime">—</span> • Джерело: hoe.com.ua
-      </div>
-
-      <div
-        id="jsonModal"
-        class="json-modal"
-        onclick="if(event.target.id==='jsonModal'){this.style.display='none'}"
-      >
-        <div
-          class="json-inner"
-          role="dialog"
-          aria-modal="true"
-          aria-label="JSON результат"
-        >
-          <button
-            class="close-x"
-            onclick="document.getElementById('jsonModal').style.display='none'"
-          >
-            ✕
-          </button>
-          <div
-            style="display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap"
-          >
-            <button class="btn" onclick="copyJson()">Копіювати JSON</button>
-            <button
-              class="btn secondary"
-              onclick="document.getElementById('jsonModal').style.display='none'"
-            >
-              Закрити
-            </button>
-          </div>
-          <pre
-            id="jsonText"
-            style="white-space: pre-wrap; font-size: 0.9rem; margin: 0"
-          ></pre>
-        </div>
+      <div class="controls">
+        <button class="btn" onclick="reloadData()">↻ Оновити</button>
+        <button class="btn secondary" onclick="toggleJsonModal(true)">JSON</button>
       </div>
     </div>
 
-    <script>
-      const API_URL =
-        "https://script.google.com/macros/s/AKfycbwXsiFhTTgeBUArbWgbo6jfd_FEaGK5jRtVnSc3SM-M-KKt-OWfCs6iq1C7u-_XxmJv/exec";
+    <div id="errorContainer"></div>
 
-      let currentData = null;
+    <div class="info">
+      <div class="small">Оновлено: <span id="timestamp">—</span></div>
+    </div>
 
-      function escapeHtml(text) {
-        if (text == null) return "";
-        const div = document.createElement("div");
-        div.textContent = String(text);
-        return div.innerHTML;
+    <div id="content">
+      <div class="loading">
+        <div class="spinner"></div>
+        Завантаження даних…
+      </div>
+    </div>
+
+    <div class="footer">
+      Згенеровано: <span id="footerTime">—</span> • Джерело: hoe.com.ua
+    </div>
+
+    <!-- Modal -->
+    <div id="jsonModal" class="json-modal" onclick="if(event.target.id==='jsonModal'){toggleJsonModal(false)}">
+      <div class="json-inner" role="dialog" aria-modal="true" aria-label="JSON результат">
+        <button class="close-x" onclick="toggleJsonModal(false)">
+          ✕
+        </button>
+        <div class="modal-actions">
+          <button class="btn" onclick="copyJson()">Копіювати JSON</button>
+          <button class="btn secondary" onclick="toggleJsonModal(false)">
+            Закрити
+          </button>
+        </div>
+        <pre id="jsonText" class="json-text"></pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL =
+      "https://script.google.com/macros/s/AKfycbwXsiFhTTgeBUArbWgbo6jfd_FEaGK5jRtVnSc3SM-M-KKt-OWfCs6iq1C7u-_XxmJv/exec";
+
+    let currentData = null;
+
+    /** Helpers */
+    function escapeHtml(text) {
+      if (text == null) return "";
+      const div = document.createElement("div");
+      div.textContent = String(text);
+      return div.innerHTML;
+    }
+
+    function parseDateTime(dateStr) {
+      if (!dateStr) return null;
+      // Format: "28.01.2026 09:00" or "28.01.2026 9:00"
+      const match = dateStr.match(
+        /(\d{1,2})\.(\d{1,2})\.(\d{4})\s+(\d{1,2}):(\d{2})/
+      );
+      if (!match) return null;
+
+      const [, day, month, year, hour, minute] = match;
+      return new Date(year, month - 1, day, hour, minute);
+    }
+
+    function getEventStatus(event) {
+      if (!event.start || !event.end) return "unknown";
+
+      const now = new Date();
+      const startDate = parseDateTime(event.start);
+      const endDate = parseDateTime(event.end);
+
+      if (!startDate || !endDate) return "unknown";
+
+      if (now < startDate) {
+        return "future";
+      } else if (now >= startDate && now <= endDate) {
+        return "current";
+      } else {
+        return "past";
+      }
+    }
+
+    function getUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        settlement: params.get("settlement") || params.get("settlementId"),
+        street: params.get("street") || params.get("streetId"),
+        house: params.get("house") || params.get("h"),
+      };
+    }
+
+    /** UI Actions */
+    function showError(message) {
+      const container = document.getElementById("errorContainer");
+      container.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
+    }
+
+    function clearError() {
+      document.getElementById("errorContainer").innerHTML = "";
+    }
+
+    function toggleJsonModal(show) {
+      document.getElementById("jsonModal").style.display = show ? "flex" : "none";
+    }
+
+    function copyJson() {
+      const text = document.getElementById("jsonText").textContent || "";
+
+      const onSuccess = () => alert("JSON скопійовано");
+      const onFail = () => alert("Не вдалося скопіювати");
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(onSuccess, onFail);
+        return;
       }
 
-      function parseDateTime(dateStr) {
-        if (!dateStr) return null;
-
-        // Формат: "28.01.2026 09:00" або "28.01.2026 9:00"
-        const match = dateStr.match(
-          /(\d{1,2})\.(\d{1,2})\.(\d{4})\s+(\d{1,2}):(\d{2})/
-        );
-        if (!match) return null;
-
-        const [, day, month, year, hour, minute] = match;
-        return new Date(year, month - 1, day, hour, minute);
+      // Fallback
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        const successful = document.execCommand("copy");
+        successful ? onSuccess() : onFail();
+      } catch (err) {
+        onFail();
       }
+      document.body.removeChild(textarea);
+    }
 
-      function getEventStatus(event) {
-        if (!event.start || !event.end) return "unknown";
+    /** Data Loading */
+    async function loadData() {
+      const params = getUrlParams();
+      console.log("URL параметри:", params);
 
-        const now = new Date();
-        const startDate = parseDateTime(event.start);
-        const endDate = parseDateTime(event.end);
-
-        if (!startDate || !endDate) return "unknown";
-
-        if (now < startDate) {
-          return "future"; // Майбутнє
-        } else if (now >= startDate && now <= endDate) {
-          return "current"; // Поточне
-        } else {
-          return "past"; // Минуле
-        }
-      }
-
-      function getUrlParams() {
-        const params = new URLSearchParams(window.location.search);
-        return {
-          settlement: params.get("settlement") || params.get("settlementId"),
-          street: params.get("street") || params.get("streetId"),
-          house: params.get("house") || params.get("h"),
-        };
-      }
-
-      function showError(message) {
-        const container = document.getElementById("errorContainer");
-        container.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
-      }
-
-      function clearError() {
-        document.getElementById("errorContainer").innerHTML = "";
-      }
-
-      async function loadData() {
-        const params = getUrlParams();
-
-        console.log("URL параметри:", params);
-
-        if (!params.settlement || !params.street || !params.house) {
-          showError(
-            "Не вказано обов'язкові параметри: settlement, street, house"
-          );
-          document.getElementById("content").innerHTML =
-            '<div class="empty">Параметри відсутні. Використайте URL вигляду: ?settlement=26499&street=280401&house=109</div>';
-          return;
-        }
-
-        clearError();
-        document.getElementById("content").innerHTML =
-          '<div class="loading"><div class="spinner"></div>Завантаження даних…</div>';
-
-        try {
-          // Спробуємо спочатку через fetch
-          const url = `${API_URL}?settlement=${encodeURIComponent(
-            params.settlement
-          )}&street=${encodeURIComponent(
-            params.street
-          )}&house=${encodeURIComponent(params.house)}&format=json`;
-
-          console.log("Запит до API:", url);
-
-          const response = await fetch(url, {
-            method: "GET",
-            redirect: "follow",
-          });
-
-          console.log("Статус відповіді:", response.status);
-
-          if (!response.ok) {
-            throw new Error(`HTTP помилка: ${response.status}`);
-          }
-
-          const data = await response.json();
-
-          console.log("Отримані дані:", data);
-
-          if (data.error) {
-            throw new Error(data.error);
-          }
-
-          currentData = {
-            events: Array.isArray(data) ? data : [],
-            settlement: params.settlement,
-            street: params.street,
-            house: params.house,
-          };
-
-          renderData(currentData);
-        } catch (error) {
-          console.error("Помилка завантаження:", error);
-
-          // Якщо fetch не спрацював через CORS, спробуємо через iframe
-          if (
-            error.message.includes("CORS") ||
-            error.message.includes("Failed to fetch")
-          ) {
-            console.log("Спроба через iframe...");
-            loadDataViaIframe(params);
-          } else {
-            showError(
-              "Не вдалося завантажити дані: " +
-                error.message +
-                ". Перевірте, що ви створили НОВИЙ deployment у Google Apps Script з доступом 'Anyone'."
-            );
-            document.getElementById("content").innerHTML =
-              '<div class="empty">Помилка завантаження. Відкрийте Console (F12) для деталей.</div>';
-          }
-        }
-      }
-
-      function loadDataViaIframe(params) {
+      if (!params.settlement || !params.street || !params.house) {
         showError(
-          "Виявлено проблему з CORS. Спробуйте створити НОВИЙ deployment у Google Apps Script або відкрийте сторінку напряму через Google Apps Script URL."
+          "Не вказано обов'язкові параметри: settlement, street, house"
         );
+        document.getElementById("content").innerHTML =
+          '<div class="empty">Параметри відсутні. Використайте URL вигляду: ?settlement=26499&street=280401&house=109</div>';
+        return;
+      }
 
-        const directUrl = `${API_URL}?settlement=${encodeURIComponent(
+      clearError();
+      document.getElementById("content").innerHTML =
+        '<div class="loading"><div class="spinner"></div>Завантаження даних…</div>';
+
+      try {
+        const url = `${API_URL}?settlement=${encodeURIComponent(
           params.settlement
         )}&street=${encodeURIComponent(
           params.street
-        )}&house=${encodeURIComponent(params.house)}`;
+        )}&house=${encodeURIComponent(params.house)}&format=json`;
 
-        document.getElementById("content").innerHTML = `<div class="empty">
+        console.log("Запит до API:", url);
+
+        const response = await fetch(url, {
+          method: "GET",
+          redirect: "follow",
+        });
+
+        console.log("Статус відповіді:", response.status);
+
+        if (!response.ok) {
+          throw new Error(`HTTP помилка: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Отримані дані:", data);
+
+        if (data.error) {
+          throw new Error(data.error);
+        }
+
+        currentData = {
+          events: Array.isArray(data) ? data : [],
+          settlement: params.settlement,
+          street: params.street,
+          house: params.house,
+        };
+
+        renderData(currentData);
+      } catch (error) {
+        console.error("Помилка завантаження:", error);
+        if (
+          error.message.includes("CORS") ||
+          error.message.includes("Failed to fetch")
+        ) {
+          console.log("Спроба через iframe...");
+          loadDataViaIframe(params);
+        } else {
+          showError(
+            "Не вдалося завантажити дані: " +
+            error.message +
+            ". Перевірте, що ви створили НОВИЙ deployment у Google Apps Script з доступом 'Anyone'."
+          );
+          document.getElementById("content").innerHTML =
+            '<div class="empty">Помилка завантаження. Відкрийте Console (F12) для деталей.</div>';
+        }
+      }
+    }
+
+    function loadDataViaIframe(params) {
+      showError(
+        "Виявлено проблему з CORS. Спробуйте створити НОВИЙ deployment у Google Apps Script або відкрийте сторінку напряму через Google Apps Script URL."
+      );
+      const directUrl = `${API_URL}?settlement=${encodeURIComponent(
+        params.settlement
+      )}&street=${encodeURIComponent(
+        params.street
+      )}&house=${encodeURIComponent(params.house)}`;
+
+      document.getElementById("content").innerHTML = `<div class="empty">
             <p>Не вдалося завантажити через CORS.</p>
             <p><a href="${directUrl}" target="_blank" class="btn">Відкрити напряму</a></p>
           </div>`;
+    }
+
+    function reloadData() {
+      loadData();
+    }
+
+    /** Rendering */
+    function renderData(data) {
+      const timestamp = new Date().toLocaleString("uk-UA");
+
+      document.getElementById("settlementId").textContent = data.settlement || "—";
+      document.getElementById("streetId").textContent = data.street || "—";
+      document.getElementById("house").textContent = data.house || "—";
+      document.getElementById("timestamp").textContent = timestamp;
+      document.getElementById("footerTime").textContent = timestamp;
+      document.getElementById("jsonText").textContent = JSON.stringify(
+        data.events,
+        null,
+        2
+      );
+
+      const content = document.getElementById("content");
+
+      if (!data.events || data.events.length === 0) {
+        content.innerHTML = '<div class="empty">Відключень не знайдено</div>';
+        return;
       }
 
-      function renderData(data) {
-        const timestamp = new Date().toLocaleString("uk-UA");
+      const tableHTML = generateTableHTML(data.events);
+      const cardsHTML = generateCardsHTML(data.events);
 
-        document.getElementById("settlementId").textContent =
-          data.settlement || "—";
-        document.getElementById("streetId").textContent = data.street || "—";
-        document.getElementById("house").textContent = data.house || "—";
-        document.getElementById("timestamp").textContent = timestamp;
-        document.getElementById("footerTime").textContent = timestamp;
-        document.getElementById("jsonText").textContent = JSON.stringify(
-          data.events,
-          null,
-          2
-        );
+      content.innerHTML = tableHTML + cardsHTML;
+    }
 
-        const content = document.getElementById("content");
+    function generateTableHTML(events) {
+      const rows = events.map((ev) => {
+        const status = getEventStatus(ev);
+        const statusClass = `status-${status}`;
 
-        if (!data.events || data.events.length === 0) {
-          content.innerHTML = '<div class="empty">Відключень не знайдено</div>';
-          return;
+        if (ev && ev.cells) {
+          return `<tr class="${statusClass}"><td colspan="6">${escapeHtml(
+            JSON.stringify(ev.cells)
+          )}</td></tr>`;
         }
 
-        // Сортування за часом початку (від новіших до старіших)
-        const sortedEvents = [...data.events].sort((a, b) => {
-          const dateA = parseDateTime(a.start);
-          const dateB = parseDateTime(b.start);
+        return `
+            <tr class="${statusClass}">
+              <td>${escapeHtml(ev.workType || "")}</td>
+              <td>${escapeHtml(ev.shutdownType || "")}</td>
+              <td>${escapeHtml(ev.queueGPV || "")}</td>
+              <td>${escapeHtml(ev.queueGAV || "")}</td>
+              <td>${escapeHtml(ev.start || "")}</td>
+              <td>${escapeHtml(ev.end || "")}</td>
+            </tr>`;
+      }).join("");
 
-          // Якщо дати не розпізнано, залишаємо як є
-          if (!dateA && !dateB) return 0;
-          if (!dateA) return 1;
-          if (!dateB) return -1;
-
-          // Сортуємо від новіших до старіших (зворотний порядок)
-          return dateB - dateA;
-        });
-
-        if (!data.events || data.events.length === 0) {
-          content.innerHTML =
-            '<div class="empty">Відключень не знайдено.</div>';
-          return;
-        }
-
-        // Таблиця
-        let tableHTML = `
+      return `
         <div class="table-wrap" role="region" aria-label="Результати відключень">
           <table>
             <thead>
@@ -658,47 +707,37 @@
                 <th>Кінець</th>
               </tr>
             </thead>
-            <tbody>`;
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`;
+    }
 
-        data.events.forEach((ev) => {
-          const status = getEventStatus(ev);
-          const statusClass = `status-${status}`;
+    function generateCardsHTML(events) {
+      // Sort for cards: newest to oldest
+      const sortedEvents = [...events].sort((a, b) => {
+        const dateA = parseDateTime(a.start);
+        const dateB = parseDateTime(b.start);
+        if (!dateA && !dateB) return 0;
+        if (!dateA) return 1;
+        if (!dateB) return -1;
+        return dateB - dateA;
+      });
 
-          if (ev && ev.cells) {
-            tableHTML += `<tr class="${statusClass}"><td colspan="6">${escapeHtml(
-              JSON.stringify(ev.cells)
-            )}</td></tr>`;
-          } else {
-            tableHTML += `
-            <tr class="${statusClass}">
-              <td>${escapeHtml(ev.workType || "")}</td>
-              <td>${escapeHtml(ev.shutdownType || "")}</td>
-              <td>${escapeHtml(ev.queueGPV || "")}</td>
-              <td>${escapeHtml(ev.queueGAV || "")}</td>
-              <td>${escapeHtml(ev.start || "")}</td>
-              <td>${escapeHtml(ev.end || "")}</td>
-            </tr>`;
-          }
-        });
+      const cards = sortedEvents.map((ev) => {
+        const status = getEventStatus(ev);
+        const statusClass = `status-${status}`;
 
-        tableHTML += `</tbody></table></div>`;
-
-        // Картки
-        let cardsHTML = '<div class="cards">';
-        sortedEvents.forEach((ev) => {
-          const status = getEventStatus(ev);
-          const statusClass = `status-${status}`;
-
-          if (ev && ev.cells) {
-            cardsHTML += `
+        if (ev && ev.cells) {
+          return `
             <div class="card ${statusClass}">
               <div class="card-row">
                 <div class="card-label">Додатково</div>
               </div>
               <div>${escapeHtml(JSON.stringify(ev.cells))}</div>
             </div>`;
-          } else {
-            cardsHTML += `
+        }
+
+        return `
             <div class="card ${statusClass}">
               <div class="card-row">
                 <div>
@@ -707,17 +746,17 @@
                 </div>
                 <div class="small">${escapeHtml(ev.shutdownType || "")}</div>
               </div>
-              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;">
-                <div style="min-width:120px">
+              <div class="card-details">
+                <div class="card-col">
                   <div class="card-label">Черга (ГПВ)</div>
                   <div class="card-value">${escapeHtml(ev.queueGPV || "")}</div>
                 </div>
-                <div style="min-width:120px">
+                <div class="card-col">
                   <div class="card-label">Черга (ГАВ)</div>
                   <div class="card-value">${escapeHtml(ev.queueGAV || "")}</div>
                 </div>
               </div>
-              <div style="display:flex;gap:12px;justify-content:space-between;align-items:center;">
+              <div class="card-footer">
                 <div>
                   <div class="card-label">Початок</div>
                   <div class="card-value">${escapeHtml(ev.start || "")}</div>
@@ -728,46 +767,14 @@
                 </div>
               </div>
             </div>`;
-          }
-        });
-        cardsHTML += "</div>";
+      }).join("");
 
-        content.innerHTML = tableHTML + cardsHTML;
-      }
+      return `<div class="cards">${cards}</div>`;
+    }
 
-      function reloadData() {
-        loadData();
-      }
+    // Initial Load
+    loadData();
+  </script>
+</body>
 
-      function showJson() {
-        document.getElementById("jsonModal").style.display = "flex";
-      }
-
-      function copyJson() {
-        const text = document.getElementById("jsonText").textContent || "";
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(text).then(
-            () => alert("JSON скопійовано"),
-            () => alert("Не вдалося скопіювати")
-          );
-        } else {
-          // Fallback для старих браузерів
-          const textarea = document.createElement("textarea");
-          textarea.value = text;
-          document.body.appendChild(textarea);
-          textarea.select();
-          try {
-            document.execCommand("copy");
-            alert("JSON скопійовано");
-          } catch (err) {
-            alert("Не вдалося скопіювати");
-          }
-          document.body.removeChild(textarea);
-        }
-      }
-
-      // Завантаження даних при відкритті сторінки
-      loadData();
-    </script>
-  </body>
 </html>
