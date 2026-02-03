@@ -84,10 +84,13 @@
       text-decoration: none;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       font-size: 1rem;
       font-family: inherit;
       white-space: nowrap;
+      line-height: 1;
+      box-sizing: border-box;
     }
 
     .btn.secondary {
@@ -392,6 +395,8 @@
         padding: 11px 14px;
         font-size: 0.95rem;
         border-radius: 10px;
+        line-height: 1;
+        min-height: 44px;
       }
 
       .card {
@@ -515,7 +520,7 @@
     /** UI Actions */
     function showError(message) {
       const container = document.getElementById("errorContainer");
-      container.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
+      container.innerHTML = `<div class=\"error\">${escapeHtml(message)}</div>`;
     }
 
     function clearError() {
@@ -561,13 +566,13 @@
           "Не вказано обов'язкові параметри: settlement, street, house"
         );
         document.getElementById("content").innerHTML =
-          '<div class="empty">Параметри відсутні. Використайте URL вигляду: ?settlement=26499&street=280401&house=109</div>';
+          '<div class=\"empty\">Параметри відсутні. Використайте URL вигляду: ?settlement=26499&street=280401&house=109</div>';
         return;
       }
 
       clearError();
       document.getElementById("content").innerHTML =
-        '<div class="loading"><div class="spinner"></div>Завантаження даних…</div>';
+        '<div class=\"loading\"><div class=\"spinner\"></div>Завантаження даних…</div>';
 
       try {
         const url = `${API_URL}?settlement=${encodeURIComponent(
@@ -619,7 +624,7 @@
             ". Перевірте, що ви створили НОВИЙ deployment у Google Apps Script з доступом 'Anyone'."
           );
           document.getElementById("content").innerHTML =
-            '<div class="empty">Помилка завантаження. Відкрийте Console (F12) для деталей.</div>';
+            '<div class=\"empty\">Помилка завантаження. Відкрийте Console (F12) для деталей.</div>'; 
         }
       }
     }
@@ -634,9 +639,9 @@
         params.street
       )}&house=${encodeURIComponent(params.house)}`;
 
-      document.getElementById("content").innerHTML = `<div class="empty">
+      document.getElementById("content").innerHTML = `<div class=\"empty\">
             <p>Не вдалося завантажити через CORS.</p>
-            <p><a href="${directUrl}" target="_blank" class="btn">Відкрити напряму</a></p>
+            <p><a href=\"${directUrl}\" target=\"_blank\" class=\"btn\">Відкрити напряму</a></p>
           </div>`;
     }
 
@@ -662,7 +667,7 @@
       const content = document.getElementById("content");
 
       if (!data.events || data.events.length === 0) {
-        content.innerHTML = '<div class="empty">Відключень не знайдено</div>';
+        content.innerHTML = '<div class=\"empty\">Відключень не знайдено</div>';
         return;
       }
 
@@ -678,37 +683,37 @@
         const statusClass = `status-${status}`;
 
         if (ev && ev.cells) {
-          return `<tr class="${statusClass}"><td colspan="6">${escapeHtml(
+          return `<tr class=\"${statusClass}\"><td colspan=\"6\">${escapeHtml(
             JSON.stringify(ev.cells)
           )}</td></tr>`;
         }
 
         return `
-            <tr class="${statusClass}">
-              <td>${escapeHtml(ev.workType || "")}</td>
-              <td>${escapeHtml(ev.shutdownType || "")}</td>
-              <td>${escapeHtml(ev.queueGPV || "")}</td>
-              <td>${escapeHtml(ev.queueGAV || "")}</td>
-              <td>${escapeHtml(ev.start || "")}</td>
-              <td>${escapeHtml(ev.end || "")}</td>
+            <tr class=\"${statusClass}\"> 
+              <td>${escapeHtml(ev.workType || "")}</td>  
+              <td>${escapeHtml(ev.shutdownType || "")}</td>  
+              <td>${escapeHtml(ev.queueGPV || "")}</td>  
+              <td>${escapeHtml(ev.queueGAV || "")}</td>  
+              <td>${escapeHtml(ev.start || "")}</td>  
+              <td>${escapeHtml(ev.end || "")}</td>  
             </tr>`;
       }).join("");
 
       return `
-        <div class="table-wrap" role="region" aria-label="Результати відключень">
-          <table>
-            <thead>
-              <tr>
-                <th>Вид робіт</th>
-                <th>Тип відключення</th>
-                <th>Черга (ГПВ)</th>
-                <th>Черга (ГАВ)</th>
-                <th>Початок</th>
-                <th>Кінець</th>
-              </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-          </table>
+        <div class=\"table-wrap\" role=\"region\" aria-label=\"Результати відключень\">  
+          <table>  
+            <thead>  
+              <tr>  
+                <th>Вид робіт</th>  
+                <th>Тип відключення</th>  
+                <th>Черга (ГПВ)</th>  
+                <th>Черга (ГАВ)</th>  
+                <th>Початок</th>  
+                <th>Кінець</th>  
+              </tr>  
+            </thead>  
+            <tbody>${rows}</tbody>  
+          </table>  
         </div>`;
     }
 
@@ -729,47 +734,47 @@
 
         if (ev && ev.cells) {
           return `
-            <div class="card ${statusClass}">
-              <div class="card-row">
-                <div class="card-label">Додатково</div>
-              </div>
-              <div>${escapeHtml(JSON.stringify(ev.cells))}</div>
+            <div class=\"card ${statusClass}\">  
+              <div class=\"card-row\">  
+                <div class=\"card-label\">Додатково</div>  
+              </div>  
+              <div>${escapeHtml(JSON.stringify(ev.cells))}</div>  
             </div>`;
         }
 
         return `
-            <div class="card ${statusClass}">
-              <div class="card-row">
-                <div>
-                  <div class="card-label">Вид робіт</div>
-                  <div class="card-value">${escapeHtml(ev.workType || "")}</div>
-                </div>
-                <div class="small">${escapeHtml(ev.shutdownType || "")}</div>
-              </div>
-              <div class="card-details">
-                <div class="card-col">
-                  <div class="card-label">Черга (ГПВ)</div>
-                  <div class="card-value">${escapeHtml(ev.queueGPV || "")}</div>
-                </div>
-                <div class="card-col">
-                  <div class="card-label">Черга (ГАВ)</div>
-                  <div class="card-value">${escapeHtml(ev.queueGAV || "")}</div>
-                </div>
-              </div>
-              <div class="card-footer">
-                <div>
-                  <div class="card-label">Початок</div>
-                  <div class="card-value">${escapeHtml(ev.start || "")}</div>
-                </div>
-                <div>
-                  <div class="card-label">Кінець</div>
-                  <div class="card-value">${escapeHtml(ev.end || "")}</div>
-                </div>
-              </div>
+            <div class=\"card ${statusClass}\">  
+              <div class=\"card-row\">  
+                <div>  
+                  <div class=\"card-label\">Вид робіт</div>  
+                  <div class=\"card-value\">${escapeHtml(ev.workType || "")}</div>  
+                </div>  
+                <div class=\"small\">${escapeHtml(ev.shutdownType || "")}</div>  
+              </div>  
+              <div class=\"card-details\">  
+                <div class=\"card-col\">  
+                  <div class=\"card-label\">Черга (ГПВ)</div>  
+                  <div class=\"card-value\">${escapeHtml(ev.queueGPV || "")}</div>  
+                </div>  
+                <div class=\"card-col\">  
+                  <div class=\"card-label\">Черга (ГАВ)</div>  
+                  <div class=\"card-value\">${escapeHtml(ev.queueGAV || "")}</div>  
+                </div>  
+              </div>  
+              <div class=\"card-footer\">  
+                <div>  
+                  <div class=\"card-label\">Початок</div>  
+                  <div class=\"card-value\">${escapeHtml(ev.start || "")}</div>  
+                </div>  
+                <div>  
+                  <div class=\"card-label\">Кінець</div>  
+                  <div class=\"card-value\">${escapeHtml(ev.end || "")}</div>  
+                </div>  
+              </div>  
             </div>`;
       }).join("");
 
-      return `<div class="cards">${cards}</div>`;
+      return `<div class=\"cards\">${cards}</div>`;
     }
 
     // Initial Load
